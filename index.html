@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPC Election Poll 2026 - Sondage Electoral Etudiant</title>
+  <meta name="description" content="Plateforme de sondage des elections etudiantes de l'Universite Protestante au Congo (UPC) 2026">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" onclick="showPage('home')">
+        <div class="logo-icon">UPC</div>
+        <span>Election Poll 2026</span>
+      </a>
+      <button class="burger" onclick="toggleMobileMenu()" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links-wrapper">
+        <div class="nav-links" id="mobile-menu">
+          <a href="#" onclick="showPage('home'); closeMobileMenu()" class="nav-link active" data-page="home">Accueil</a>
+          <a href="#" onclick="showPage('vote'); closeMobileMenu()" class="nav-link" data-page="vote">Voter</a>
+          <a href="#" onclick="showPage('results'); closeMobileMenu()" class="nav-link" data-page="results">Résultats</a>
+          <a href="#" onclick="showPage('dashboard'); closeMobileMenu()" class="nav-link" data-page="dashboard">Espace Candidat</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Home Page -->
+  <main id="home-page" class="page active">
+    <section class="hero">
+      <div class="hero-content">
+        <span class="hero-badge">Sondage Electoral 2026</span>
+        <h1 class="hero-title text-balance">Votre Voix Compte a l'UPC</h1>
+        <p class="hero-description text-pretty">Participez au sondage des elections etudiantes de l'Universite Protestante au Congo. Exprimez votre preference pour le President des Etudiants et le PREFAC de votre faculte.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary btn-lg" onclick="showPage('vote')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+            </svg>
+            Participer au Sondage
+          </button>
+          <button class="btn btn-outline btn-lg" onclick="showPage('results')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10M12 20V4M6 20v-6"></path>
+            </svg>
+            Voir les Resultats
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">Comment ca Marche</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <h3>1. Selectionnez votre Faculte</h3>
+            <p>Choisissez votre faculte parmi les 5 facultes de l'UPC pour acceder aux candidats PREFAC.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon accent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+              </svg>
+            </div>
+            <h3>2. Votez pour vos Candidats</h3>
+            <p>Exprimez votre preference pour le PREFAC de votre faculte et le President des Etudiants.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10M12 20V4M6 20v-6"></path>
+              </svg>
+            </div>
+            <h3>3. Consultez les Resultats</h3>
+            <p>Suivez les tendances en temps reel et decouvrez les preferences des etudiants.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faculties-preview">
+      <div class="container">
+        <h2 class="section-title">Les Facultes</h2>
+        <div class="faculties-grid">
+          <div class="faculty-card" onclick="selectFacultyAndVote('fase')">
+            <div class="faculty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+            <h3>FASE</h3>
+            <p>Faculte des Sciences Economiques</p>
+            <span class="faculty-candidates">2 candidats PREFAC</span>
+          </div>
+          <div class="faculty-card" onclick="selectFacultyAndVote('droit')">
+            <div class="faculty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+              </svg>
+            </div>
+            <h3>Droit</h3>
+            <p>Faculte de Droit</p>
+            <span class="faculty-candidates">2 candidats PREFAC</span>
+          </div>
+          <div class="faculty-card" onclick="selectFacultyAndVote('medecine')">
+            <div class="faculty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+            </div>
+            <h3>Medecine</h3>
+            <p>Faculte de Medecine</p>
+            <span class="faculty-candidates">2 candidats PREFAC</span>
+          </div>
+          <div class="faculty-card" onclick="selectFacultyAndVote('fasi')">
+            <div class="faculty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                <path d="M8 21h8M12 17v4"></path>
+              </svg>
+            </div>
+            <h3>FASI</h3>
+            <p>Faculte des Sciences Informatiques</p>
+            <span class="faculty-candidates">2 candidats PREFAC</span>
+          </div>
+          <div class="faculty-card" onclick="selectFacultyAndVote('theologie')">
+            <div class="faculty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+              </svg>
+            </div>
+            <h3>Theologie</h3>
+            <p>Faculte de Theologie</p>
+            <span class="faculty-candidates">2 candidats PREFAC</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-content">
+          <h2>Pret a Participer?</h2>
+          <p>Rejoignez des centaines d'etudiants qui ont deja exprime leur preference.</p>
+          <button class="btn btn-accent btn-lg" onclick="showPage('vote')">Voter Maintenant</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Vote Page -->
+  <main id="vote-page" class="page">
+    <div class="container vote-container">
+      <!-- Progress Steps -->
+      <div class="progress-steps">
+        <div class="step active" data-step="1">
+          <div class="step-number">1</div>
+          <span>Faculte</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">
+          <div class="step-number">2</div>
+          <span>PREFAC</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+          <div class="step-number">3</div>
+          <span>President</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Faculty Selection -->
+      <div id="step-1" class="vote-step active">
+        <div class="step-header">
+          <h2>Selectionnez votre Faculte</h2>
+          <p>Choisissez la faculte a laquelle vous appartenez pour voir les candidats PREFAC.</p>
+        </div>
+        <div class="faculty-selection-grid" id="faculty-selection">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Step 2: PREFAC Voting -->
+      <div id="step-2" class="vote-step">
+        <div class="step-header">
+          <button class="btn btn-ghost" onclick="goToStep(1)">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            Retour
+          </button>
+          <h2>Votez pour le PREFAC - <span id="selected-faculty-name"></span></h2>
+          <p>Selectionnez votre candidat prefere pour le poste de President de Faculte.</p>
+        </div>
+        <div class="candidates-grid" id="prefac-candidates">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Step 3: Presidential Voting -->
+      <div id="step-3" class="vote-step">
+        <div class="step-header">
+          <button class="btn btn-ghost" onclick="goToStep(2)">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            Retour
+          </button>
+          <h2>Votez pour le President des Etudiants UPC</h2>
+          <p>Selectionnez votre candidat prefere pour le poste de President des Etudiants.</p>
+        </div>
+        <div class="candidates-grid" id="presidential-candidates">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Success Screen -->
+      <div id="vote-success" class="vote-step">
+        <div class="success-content">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+              <path d="M22 4L12 14.01l-3-3"></path>
+            </svg>
+          </div>
+          <h2>Merci pour votre Participation!</h2>
+          <p>Votre vote a ete enregistre avec succes. Vous pouvez consulter les resultats en temps reel.</p>
+          <div class="success-buttons">
+            <button class="btn btn-primary" onclick="showPage('results')">Voir les Resultats</button>
+            <button class="btn btn-outline" onclick="showPage('home')">Retour a l'Accueil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Results Page -->
+  <main id="results-page" class="page">
+    <div class="container results-container">
+      <div class="results-header">
+        <h1>Resultats du Sondage</h1>
+        <p>Suivez les tendances en temps reel des elections etudiantes UPC 2026</p>
+        <div class="results-stats">
+          <div class="stat-card">
+            <span class="stat-value" id="total-votes">0</span>
+            <span class="stat-label">Votes Totaux</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">5</span>
+            <span class="stat-label">Facultes</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">14</span>
+            <span class="stat-label">Candidats</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presidential Results -->
+      <section class="results-section">
+        <h2>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 1012 0V2z"></path>
+          </svg>
+          President des Etudiants
+        </h2>
+        <div class="results-chart" id="presidential-results">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Faculty Results -->
+      <section class="results-section">
+        <div class="faculty-results-header">
+          <h2>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path>
+            </svg>
+            PREFAC par Faculte
+          </h2>
+          <div class="faculty-tabs" id="faculty-tabs">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <div class="results-chart" id="faculty-results">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Dashboard Page -->
+  <main id="dashboard-page" class="page">
+    <div class="container dashboard-container">
+      <!-- Login Form -->
+      <div id="dashboard-login" class="dashboard-section">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <h2>Espace Candidat</h2>
+            <p>Connectez-vous pour voir vos statistiques de vote</p>
+          </div>
+          <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label for="candidate-select">Selectionnez votre nom</label>
+              <select id="candidate-select" required>
+                <option value="">-- Choisir un candidat --</option>
+                <optgroup label="Candidats President">
+                </optgroup>
+                <optgroup label="PREFAC FASE">
+                </optgroup>
+                <optgroup label="PREFAC Droit">
+                </optgroup>
+                <optgroup label="PREFAC Medecine">
+                </optgroup>
+                <optgroup label="PREFAC FASI">
+                </optgroup>
+                <optgroup label="PREFAC Theologie">
+                </optgroup>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="password">Code d'acces</label>
+              <input type="password" id="password" placeholder="Entrez votre code" required>
+              <span class="form-hint">Code par defaut: upc2026</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-full">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"></path>
+              </svg>
+              Se Connecter
+            </button>
+          </form>
+          <div id="login-error" class="login-error"></div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div id="dashboard-content" class="dashboard-section" style="display: none;">
+        <div class="dashboard-header">
+          <div class="dashboard-welcome">
+            <h1>Bienvenue, <span id="dashboard-name"></span></h1>
+            <p id="dashboard-position"></p>
+          </div>
+          <button class="btn btn-outline" onclick="handleLogout()">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"></path>
+            </svg>
+            Deconnexion
+          </button>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="dashboard-stats">
+          <div class="dash-stat-card primary">
+            <div class="dash-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+              </svg>
+            </div>
+            <div class="dash-stat-info">
+              <span class="dash-stat-value" id="my-votes">0</span>
+              <span class="dash-stat-label">Mes Votes</span>
+            </div>
+          </div>
+          <div class="dash-stat-card accent">
+            <div class="dash-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10M12 20V4M6 20v-6"></path>
+              </svg>
+            </div>
+            <div class="dash-stat-info">
+              <span class="dash-stat-value" id="my-percentage">0%</span>
+              <span class="dash-stat-label">Pourcentage</span>
+            </div>
+          </div>
+          <div class="dash-stat-card success">
+            <div class="dash-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 1012 0V2z"></path>
+              </svg>
+            </div>
+            <div class="dash-stat-info">
+              <span class="dash-stat-value" id="my-rank">-</span>
+              <span class="dash-stat-label">Classement</span>
+            </div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path>
+              </svg>
+            </div>
+            <div class="dash-stat-info">
+              <span class="dash-stat-value" id="total-category-votes">0</span>
+              <span class="dash-stat-label">Votes Totaux (categorie)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Chart -->
+        <div class="dashboard-chart-section">
+          <h2>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10M12 20V4M6 20v-6"></path>
+            </svg>
+            Comparaison avec les autres candidats
+          </h2>
+          <div class="comparison-chart" id="comparison-chart">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Vote History -->
+        <div class="dashboard-history-section">
+          <h2>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+            Informations de Campagne
+          </h2>
+          <div class="campaign-info">
+            <div class="info-item">
+              <span class="info-label">Slogan:</span>
+              <span class="info-value" id="my-slogan"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Categorie:</span>
+              <span class="info-value" id="my-category"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Statut:</span>
+              <span class="info-value status-active">Campagne Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-content">
+      <h3>Confirmer votre Vote</h3>
+      <p id="confirm-message"></p>
+      <div class="modal-buttons">
+        <button class="btn btn-outline" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" id="confirm-btn">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>UPC Election Poll 2026 - Universite Protestante au Congo</p>
+      <p class="footer-note">Ceci est un sondage non officiel a but informatif uniquement.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
