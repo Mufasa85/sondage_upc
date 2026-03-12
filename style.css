@@ -673,6 +673,7 @@ body {
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
 }
 
 .faculty-select-card:hover {

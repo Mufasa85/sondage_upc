@@ -3,22 +3,22 @@
   'use strict';
   
   // ===== DATA FASE =====
-  const faculties = [{ id: 'fase', name: 'FASE', fullName: 'Faculte des Sciences Economiques' }];
+  const faculties = [{ id: 'droit', name: 'DROIT', fullName: 'Faculte de Droit' }];
   const facultyCandidates = {
     fase: [
-      { id: 'fase1', name: 'Bamue Kayembe Claudine', slogan: "Une économie forte pour des étudiants forts" },
-      { id: 'fase2', name: 'Katolo Nkosso Lucien', slogan: "Rigueur, transparence et résultats pour tous" },
-      { id: 'fase3', name: 'Mwipita Mufuta Jessy', slogan: "Innover aujourd'hui pour l'économie de demain" },
-      { id: 'fase4', name: "N'Thila Masanka Pathou", slogan: "Leadership, engagement et progrès étudiant" },
-      { id: 'fase5', name: 'Otshumbe Klonda Laurent', slogan: "Des idées nouvelles pour une faculté meilleure" },
-      { id: 'fase6', name: 'Tunda Nkoji Sam', slogan: "Ensemble pour une gestion responsable et efficace" }
+      { id: 'droit1', name: 'Bamue Kayembe Claudine', slogan: "Justice, équité et voix pour chaque étudiant" },
+      { id: 'droit2', name: 'Katolo Nkosso Lucien', slogan: "Le droit au service des étudiants" },
+      { id: 'droit3', name: 'Mwipita Mufuta Jessy', slogan: "Défendre vos droits, construire l'avenir" },
+      { id: 'droit4', name: "N'Thila Masanka Pathou", slogan: "Justice, engagement et leadership étudiant" },
+      { id: 'droit5', name: 'Otshumbe Klonda Laurent', slogan: "Pour une faculté juste et respectée" },
+      { id: 'droit6', name: 'Tunda Nkoji Sam', slogan: "La voix des étudiants, la force du droit" }
     ]
   };
   
   // ===== STATE =====
   let currentPage = 'home';
   let currentStep = 1;
-  let selectedFaculty = 'fase';
+let selectedFaculty = 'droit';
   let selectedPrefac = null;
   let votes = JSON.parse(localStorage.getItem('upc_votes') || '{}');
   let hasVoted = false; // Reset pour debug
@@ -28,8 +28,8 @@
   // ===== INIT VOTES =====
   function initializeVotes() {
     if (!votes.faculty) {
-      votes.faculty = { fase: {} };
-      facultyCandidates.fase.forEach(c => votes.faculty.fase[c.id] = 0);
+    votes.faculty = { droit: {} };
+      facultyCandidates.droit.forEach(c => votes.faculty.droit[c.id] = 0);
     }
     localStorage.setItem('upc_votes', JSON.stringify(votes));
     localStorage.setItem('upc_has_voted', JSON.stringify(hasVoted));
@@ -106,7 +106,7 @@
       <div class="faculty-select-card selected">
         <h3>${faculty.name}</h3>
         <p>${faculty.fullName}</p>
-        <div class="auto-select-badge">FASE ✓ Auto-sélectionné</div>
+        <div class="auto-select-badge">DROIT ✓ Auto-sélectionné</div>
         <button class="btn btn-primary" onclick="goToStep(2)">Continuer PREFAC</button>
       </div>
     `;
@@ -125,7 +125,7 @@
           <div class="candidate-avatar">${getInitials(candidate.name)}</div>
           <div class="candidate-info">
             <h3>${candidate.name}</h3>
-            <p>PREFAC FASE</p>
+            <p>PREFAC Droit</p>
           </div>
         </div>
         <div class="candidate-slogan">"${candidate.slogan}"</div>
@@ -177,7 +177,7 @@ function renderResults() {
           <div class="result-candidate">
             <div class="result-avatar">${getInitials(candidate.name)}</div>
             <span class="result-name">
-              ${candidate.name} ${isLeader ? '<span class="leader-badge">👑 Leader</span>' : ''}
+              ${candidate.name} ${isLeader ? '<span class="leader-badge"> Leader</span>' : ''}
             </span>
           </div>
           <div class="result-bar-container">
@@ -199,7 +199,7 @@ window.renderResults = renderResults;
     const select = document.getElementById('candidate-select');
     if (!select) return;
     
-    select.innerHTML = '<option value="">Sélectionnez PREFAC FASE</option>';
+select.innerHTML = '<option value="">Sélectionnez PREFAC DROIT</option>';
     
     facultyCandidates.fase.forEach(c => {
       const opt = new Option(c.name, `faculty:fase:${c.id}`);
@@ -238,7 +238,7 @@ window.renderResults = renderResults;
     document.getElementById('dashboard-content').style.display = 'block';
     
     document.getElementById('dashboard-name').textContent = loggedInCandidate.name;
-    document.getElementById('dashboard-position').textContent = 'PREFAC FASE';
+document.getElementById('dashboard-position').textContent = 'PREFAC DROIT';
     document.getElementById('my-slogan').textContent = `"${loggedInCandidate.slogan}"`;
     
     updateDashboardStats();
@@ -316,7 +316,7 @@ window.renderResults = renderResults;
   window.showPage = showPage;
 window.selectPrefacCandidate = selectPrefacCandidate;
 window.goToStep = goToStep;
-  window.goToFASEVote = () => { selectedFaculty = 'fase'; showPage('vote'); };
+window.goToDROITVote = () => { selectedFaculty = 'droit'; showPage('vote'); };
   window.toggleMobileMenu = toggleMobileMenu;
   window.closeMobileMenu = closeMobileMenu;
   window.handleLogin = handleLogin;
