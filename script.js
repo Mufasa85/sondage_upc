@@ -1,39 +1,18 @@
 // Election Data
 const faculties = [
-  { id: 'fase', name: 'FASE', fullName: 'Faculte des Sciences Economiques' },
-  { id: 'droit', name: 'Droit', fullName: 'Faculte de Droit' },
-  { id: 'medecine', name: 'Medecine', fullName: 'Faculte de Medecine' },
-  { id: 'fasi', name: 'FASI', fullName: 'Faculte des Sciences Informatiques' },
-  { id: 'theologie', name: 'Theologie', fullName: 'Faculte de Theologie' }
+  { id: 'fase', name: 'FASE', fullName: 'Faculte des Sciences Economiques' }
 ];
 
-const presidentialCandidates = [
-  { id: 'p1', name: 'Jed Mukendi', slogan: 'Ensemble pour une UPC unie et prospere', faculty: 'FASE' },
-  { id: 'p2', name: 'Bertin Kabongo', slogan: 'Innovation et excellence pour notre universite', faculty: 'Droit' },
-  { id: 'p3', name: 'Merveille Tshilanda', slogan: 'La voix des etudiants, notre priorite', faculty: 'FASI' },
-  { id: 'p4', name: 'Grace Mbuyi', slogan: 'Transparence et progres pour tous', faculty: 'Medecine' }
-];
+// presidentialCandidates supprimés - PREFAC FASE seulement
 
 const facultyCandidates = {
   fase: [
-    { id: 'fase1', name: 'Patient Lukusa', slogan: 'L\'economie au service des etudiants' },
-    { id: 'fase2', name: 'Divine Kasongo', slogan: 'Gestion rigoureuse, resultats concrets' }
-  ],
-  droit: [
-    { id: 'droit1', name: 'Justice Mwamba', slogan: 'Le droit pour tous, la justice partout' },
-    { id: 'droit2', name: 'Emmanuel Tshisekedi Jr', slogan: 'Integrite et leadership' }
-  ],
-  medecine: [
-    { id: 'med1', name: 'Dr. Chance Ilunga', slogan: 'La sante de notre faculte en priorite' },
-    { id: 'med2', name: 'Esperance Mutombo', slogan: 'Soigner notre avenir ensemble' }
-  ],
-  fasi: [
-    { id: 'fasi1', name: 'Tech Kabila', slogan: 'Innovation numerique pour l\'UPC' },
-    { id: 'fasi2', name: 'Code Master Bemba', slogan: 'Programmer notre reussite' }
-  ],
-  theologie: [
-    { id: 'theo1', name: 'Pasteur Mukendi', slogan: 'Foi et excellence academique' },
-    { id: 'theo2', name: 'Evangeliste Kasai', slogan: 'Service et devouement' }
+    { id: 'fase1', name: 'Bamue Kayembe Claudine', slogan: "Une économie forte pour des étudiants forts" },
+    { id: 'fase2', name: 'Katolo Nkosso Lucien', slogan: "Rigueur, transparence et résultats pour tous" },
+    { id: 'fase3', name: 'Mwipita Mufuta Jessy', slogan: "Innover aujourd’hui pour l’économie de demain" },
+    { id: 'fase4', name: "N'Thila Masanka Pathou", slogan: "Leadership, engagement et progrès étudiant" },
+    { id: 'fase5', name: 'Otshumbe Klonda Laurent', slogan: "Des idées nouvelles pour une faculté meilleure" },
+    { id: 'fase6', name: 'Tunda Nkoji Sam', slogan: "Ensemble pour une gestion responsable et efficace" }
   ]
 };
 
@@ -41,17 +20,13 @@ const facultyCandidates = {
 let currentPage = 'home';
 let currentStep = 1;
 let selectedFaculty = null;
-let selectedPrefac = null;
-let selectedPresident = null;
+let selectedPrefac = null; // PREFAC FASE seulement
 let votes = JSON.parse(localStorage.getItem('upc_votes') || '{}');
 let hasVoted = JSON.parse(localStorage.getItem('upc_has_voted') || 'false');
 
 // Initialize votes structure
 function initializeVotes() {
-  if (!votes.presidential) {
-    votes.presidential = {};
-    presidentialCandidates.forEach(c => votes.presidential[c.id] = 0);
-  }
+  // Votes présidentiels supprimés
   if (!votes.faculty) {
     votes.faculty = {};
     Object.keys(facultyCandidates).forEach(fac => {
@@ -96,8 +71,9 @@ function showPage(page) {
   window.scrollTo(0, 0);
 }
 
-function selectFacultyAndVote(facultyId) {
-  selectedFaculty = facultyId;
+// selectFacultyAndVote supprimé - FASE auto
+function goToFASEVote() {
+  selectedFaculty = 'fase';
   showPage('vote');
   goToStep(2);
 }
@@ -120,8 +96,11 @@ function goToStep(step) {
   
   if (step === 2 && selectedFaculty) {
     renderPrefacCandidates();
-  } else if (step === 3) {
-    renderPresidentialCandidates();
+    // Étape 3 supprimée - vote PREFAC direct après sélection
+    setTimeout(() => {
+      selectedPrefac = facultyCandidates.fase[0].id; // Auto-select premier ou logique
+      submitPrefacVote();
+    }, 500);
   }
 }
 
@@ -156,13 +135,15 @@ function updateProgressSteps(allComplete = false) {
 // Render Faculty Selection
 function renderFacultySelection() {
   const container = document.getElementById('faculty-selection');
-  container.innerHTML = faculties.map(fac => `
-    <div class="faculty-select-card ${selectedFaculty === fac.id ? 'selected' : ''}" 
-         onclick="selectFaculty('${fac.id}')">
-      <h3>${fac.name}</h3>
-      <p>${fac.fullName}</p>
+  const faculty = faculties[0];
+  container.innerHTML = `
+    <div class="faculty-select-card selected" onclick="selectFaculty('${faculty.id}')">
+      <h3>${faculty.name}</h3>
+      <p>${faculty.fullName}</p>
+      <span style="color: green; font-weight: bold;">✓ FASE seulement - Sélection automatique</span>
     </div>
-  `).join('');
+  `;
+  selectedFaculty = 'fase';
 }
 
 function selectFaculty(facultyId) {
@@ -211,50 +192,13 @@ function selectPrefacCandidate(candidateId) {
   );
 }
 
-// Render Presidential Candidates
-function renderPresidentialCandidates() {
-  const container = document.getElementById('presidential-candidates');
-  
-  container.innerHTML = presidentialCandidates.map(candidate => `
-    <div class="candidate-card ${selectedPresident === candidate.id ? 'selected' : ''}"
-         onclick="selectPresidentialCandidate('${candidate.id}')">
-      <div class="candidate-header">
-        <div class="candidate-avatar">${getInitials(candidate.name)}</div>
-        <div class="candidate-info">
-          <h3>${candidate.name}</h3>
-          <p>Candidat President - ${candidate.faculty}</p>
-        </div>
-      </div>
-      <div class="candidate-slogan">"${candidate.slogan}"</div>
-      <div class="candidate-actions">
-        <button class="btn ${selectedPresident === candidate.id ? 'btn-success' : 'btn-primary'}">
-          ${selectedPresident === candidate.id ? 'Selectionne' : 'Voter'}
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
+// Présidentiel supprimé - PREFAC seulement
 
-function selectPresidentialCandidate(candidateId) {
-  const candidate = presidentialCandidates.find(c => c.id === candidateId);
-  showConfirmModal(
-    `Voulez-vous voter pour ${candidate.name} comme President des Etudiants?`,
-    () => {
-      selectedPresident = candidateId;
-      submitVotes();
-    }
-  );
-}
-
-// Submit Votes
-function submitVotes() {
-  // Record votes
-  votes.presidential[selectedPresident]++;
+// Submit PREFAC Vote seulement
+function submitPrefacVote() {
   votes.faculty[selectedFaculty][selectedPrefac]++;
   hasVoted = true;
   saveVotes();
-  
-  // Show success
   showVoteSuccess();
 }
 
@@ -305,54 +249,11 @@ function closeModal() {
 
 // Results
 function renderResults() {
-  updateTotalVotes();
-  renderPresidentialResults();
   renderFacultyTabs();
   renderFacultyResults('fase');
 }
 
-function updateTotalVotes() {
-  let total = 0;
-  Object.values(votes.presidential || {}).forEach(v => total += v);
-  document.getElementById('total-votes').textContent = total;
-}
-
-function renderPresidentialResults() {
-  const container = document.getElementById('presidential-results');
-  const totalVotes = Object.values(votes.presidential || {}).reduce((a, b) => a + b, 0);
-  
-  const sortedCandidates = [...presidentialCandidates].sort((a, b) => 
-    (votes.presidential[b.id] || 0) - (votes.presidential[a.id] || 0)
-  );
-  
-  const maxVotes = Math.max(...sortedCandidates.map(c => votes.presidential[c.id] || 0));
-  
-  container.innerHTML = sortedCandidates.map((candidate, index) => {
-    const voteCount = votes.presidential[candidate.id] || 0;
-    const percentage = totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0;
-    const isLeader = index === 0 && voteCount > 0;
-    
-    return `
-      <div class="result-row">
-        <div class="result-candidate">
-          <div class="result-avatar">${getInitials(candidate.name)}</div>
-          <span class="result-name">
-            ${candidate.name}
-            ${isLeader ? '<span class="leader-badge">En tete</span>' : ''}
-          </span>
-        </div>
-        <div class="result-bar-container">
-          <div class="result-bar">
-            <div class="result-bar-fill ${isLeader ? 'leader' : ''}" style="width: ${percentage}%">
-              ${percentage > 10 ? percentage + '%' : ''}
-            </div>
-          </div>
-          <span class="result-votes">${voteCount} vote${voteCount !== 1 ? 's' : ''}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
+// Présidentiel supprimé
 
 function renderFacultyTabs() {
   const container = document.getElementById('faculty-tabs');
@@ -421,33 +322,21 @@ function populateCandidateSelect() {
   const select = document.getElementById('candidate-select');
   if (!select) return;
   
-  select.innerHTML = '<option value="">-- Choisir un candidat --</option>';
+  select.innerHTML = '<option value="">-- Choisir un candidat PREFAC FASE --</option>';
   
-  // Presidential candidates
-  const presGroup = document.createElement('optgroup');
-  presGroup.label = 'Candidats President';
-  presidentialCandidates.forEach(c => {
+  // Only FASE PREFAC
+  const facId = 'fase';
+  const faculty = faculties.find(f => f.id === facId);
+  const group = document.createElement('optgroup');
+  group.label = `PREFAC ${faculty.name}`;
+  
+  facultyCandidates[facId].forEach(c => {
     const opt = document.createElement('option');
-    opt.value = `presidential:${c.id}`;
+    opt.value = `faculty:${facId}:${c.id}`;
     opt.textContent = c.name;
-    presGroup.appendChild(opt);
+    group.appendChild(opt);
   });
-  select.appendChild(presGroup);
-  
-  // Faculty candidates
-  Object.keys(facultyCandidates).forEach(facId => {
-    const faculty = faculties.find(f => f.id === facId);
-    const group = document.createElement('optgroup');
-    group.label = `PREFAC ${faculty.name}`;
-    
-    facultyCandidates[facId].forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = `faculty:${facId}:${c.id}`;
-      opt.textContent = c.name;
-      group.appendChild(opt);
-    });
-    select.appendChild(group);
-  });
+  select.appendChild(group);
 }
 
 // Handle login
@@ -472,31 +361,19 @@ function handleLogin(event) {
   
   errorEl.classList.remove('show');
   
-  // Parse selected candidate
+  // Parse selected PREFAC FASE only
   const parts = select.value.split(':');
-  if (parts[0] === 'presidential') {
-    const candidate = presidentialCandidates.find(c => c.id === parts[1]);
-    loggedInCandidate = {
-      type: 'presidential',
-      id: candidate.id,
-      name: candidate.name,
-      slogan: candidate.slogan,
-      category: 'President des Etudiants UPC',
-      faculty: null
-    };
-  } else {
-    const facultyId = parts[1];
-    const candidate = facultyCandidates[facultyId].find(c => c.id === parts[2]);
-    const faculty = faculties.find(f => f.id === facultyId);
-    loggedInCandidate = {
-      type: 'faculty',
-      id: candidate.id,
-      name: candidate.name,
-      slogan: candidate.slogan,
-      category: `PREFAC ${faculty.name}`,
-      faculty: facultyId
-    };
-  }
+  const facultyId = parts[1];
+  const candidate = facultyCandidates[facultyId].find(c => c.id === parts[2]);
+  const faculty = faculties.find(f => f.id === facultyId);
+  loggedInCandidate = {
+    type: 'faculty',
+    id: candidate.id,
+    name: candidate.name,
+    slogan: candidate.slogan,
+    category: `PREFAC ${faculty.name}`,
+    faculty: facultyId
+  };
   
   showDashboardContent();
 }
@@ -526,16 +403,16 @@ function updateDashboardStats() {
   let totalVotes = 0;
   let allCandidatesVotes = [];
   
-  if (loggedInCandidate.type === 'presidential') {
-    myVotes = votes.presidential[loggedInCandidate.id] || 0;
-    totalVotes = Object.values(votes.presidential || {}).reduce((a, b) => a + b, 0);
-    
-    allCandidatesVotes = presidentialCandidates.map(c => ({
-      id: c.id,
-      name: c.name,
-      votes: votes.presidential[c.id] || 0
-    }));
-  } else {
+  // Only PREFAC FASE
+  const facultyVotes = votes.faculty[loggedInCandidate.faculty] || {};
+  myVotes = facultyVotes[loggedInCandidate.id] || 0;
+  totalVotes = Object.values(facultyVotes).reduce((a, b) => a + b, 0);
+  
+  allCandidatesVotes = facultyCandidates[loggedInCandidate.faculty].map(c => ({
+    id: c.id,
+    name: c.name,
+    votes: facultyVotes[c.id] || 0
+  }));
     const facultyVotes = votes.faculty[loggedInCandidate.faculty] || {};
     myVotes = facultyVotes[loggedInCandidate.id] || 0;
     totalVotes = Object.values(facultyVotes).reduce((a, b) => a + b, 0);
@@ -565,7 +442,7 @@ function updateDashboardStats() {
   
   // Render comparison chart
   renderComparisonChart(allCandidatesVotes, totalVotes);
-}
+
 
 // Render comparison chart
 function renderComparisonChart(candidates, totalVotes) {
@@ -621,10 +498,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  initializeVotes();
-  renderFacultySelection();
-  populateCandidateSelect();
-  showPage('home');
-});
+// Initialize IMMÉDIAT
+initializeVotes();
+renderFacultySelection();
+populateCandidateSelect();
+showPage('home');
+
+// Force functions global
+window.showPage = showPage;
+window.goToFASEVote = goToFASEVote;
+window.toggleMobileMenu = toggleMobileMenu;
+window.closeMobileMenu = closeMobileMenu;
