@@ -8,7 +8,6 @@ const links = [
   { href: "/", label: "Accueil", page: "home" },
   { href: "/vote", label: "Voter", page: "vote" },
   { href: "/results", label: "Résultats", page: "results" },
-  { href: "/dashboard", label: "Espace Candidat", page: "dashboard" },
 ];
 
 export function Navbar() {
@@ -56,4 +55,3 @@ export function Navbar() {
     </nav>
   );
 }
-
