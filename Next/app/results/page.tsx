@@ -1,23 +1,13 @@
 import { supabase } from "../../lib/supabaseClient";
 
-type VoteRow = {
-  candidate_id: string;
-  count: number;
-};
-
-type CandidateInfo = {
+type CandidateRow = {
   id: string;
-  name: string;
+  nom: string | null;
+  postnom: string | null;
+  prenom: string | null;
+  faculte: string | null;
+  votes: number | null;
 };
-
-const CANDIDATES: CandidateInfo[] = [
-  { id: "droit1", name: "Bamue Kayembe Claudine" },
-  { id: "droit2", name: "Katolo Nkosso Lucien" },
-  { id: "droit3", name: "Mwipita Mufuta Jessy" },
-  { id: "droit4", name: "N'Thila Masanka Pathou" },
-  { id: "droit5", name: "Otshumbe Klonda Laurent" },
-  { id: "droit6", name: "Tunda Nkoji Sam" },
-];
 
 function getInitials(name: string) {
   return name
@@ -29,33 +19,36 @@ function getInitials(name: string) {
 }
 
 async function getResults() {
-  const { data, error } = await supabase
-    .from("votes")
-    .select("candidate_id, count:candidate_id", { count: "exact", head: false });
+  const baseSelect = "id, nom, postnom, prenom, faculte, votes";
+
+  const first = await supabase
+    .from("candidat")
+    .select(baseSelect)
+    .eq("faculte", "Droit");
+
+  const second =
+    !first.error && Array.isArray(first.data) && first.data.length === 0
+      ? await supabase
+          .from("candidat")
+          .select(baseSelect)
+          .eq("faculte", "droit")
+      : null;
+
+  const data = (second?.data ?? first.data) as CandidateRow[] | null;
+  const error = second?.error ?? first.error;
 
   if (error || !data) {
     return {
       totalVotes: 0,
-      results: CANDIDATES.map((c) => ({ candidate: c, votes: 0 })),
+      results: [] as { candidate: CandidateRow; votes: number }[],
     };
   }
 
-  const countsByCandidate: Record<string, number> = {};
-  (data as VoteRow[]).forEach((row) => {
-    countsByCandidate[row.candidate_id] =
-      (countsByCandidate[row.candidate_id] || 0) + row.count;
-  });
+  const results = data
+    .map((c) => ({ candidate: c, votes: (c.votes ?? 0) as number }))
+    .sort((a, b) => b.votes - a.votes);
 
-  const totalVotes = Object.values(countsByCandidate).reduce(
-    (sum, v) => sum + v,
-    0,
-  );
-
-  const results = CANDIDATES.map((c) => ({
-    candidate: c,
-    votes: countsByCandidate[c.id] || 0,
-  })).sort((a, b) => b.votes - a.votes);
-
+  const totalVotes = results.reduce((sum, r) => sum + r.votes, 0);
   return { totalVotes, results };
 }
 
@@ -69,8 +62,7 @@ export default async function ResultsPage() {
         <div className="results-header">
           <h1>Resultats du Sondage</h1>
           <p>
-            Suivez les tendances en temps reel des elections etudiantes UPC
-            2026
+            Suivez les tendances en temps reel des elections etudiantes UPC 2026
           </p>
           <div className="results-stats">
             <div className="stat-card">
@@ -85,7 +77,9 @@ export default async function ResultsPage() {
             </div>
             <div className="stat-card">
               <span className="stat-value" id="leader-name">
-                {leader && leader.votes > 0 ? leader.candidate.name : "--"}
+                {leader && leader.votes > 0
+                  ? `${leader.candidate.prenom ?? ""} ${leader.candidate.postnom ?? ""} ${leader.candidate.nom ?? ""}`.trim()
+                  : "--"}
               </span>
               <span className="stat-label">En Tête</span>
             </div>
@@ -114,14 +108,16 @@ export default async function ResultsPage() {
               const percentage =
                 totalVotes > 0 ? Math.round((row.votes / totalVotes) * 100) : 0;
               const isLeader = index === 0 && row.votes > 0;
+              const fullName =
+                `${row.candidate.prenom ?? ""} ${row.candidate.postnom ?? ""} ${row.candidate.nom ?? ""}`.trim();
               return (
                 <div className="result-row" key={row.candidate.id}>
                   <div className="result-candidate">
                     <div className="result-avatar">
-                      {getInitials(row.candidate.name)}
+                      {getInitials(fullName || "--")}
                     </div>
                     <span className="result-name">
-                      {row.candidate.name}
+                      {fullName || "--"}
                       {isLeader && (
                         <span className="leader-badge"> Leader</span>
                       )}
@@ -153,4 +149,3 @@ export default async function ResultsPage() {
     </main>
   );
 }
-
