@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabase";
 
 type Candidate = {
   id: string;
@@ -16,62 +16,6 @@ type Candidate = {
 const FACULTY_ID = "droit";
 
 // Modèle local aligné avec la table Supabase `candidates`
-const CANDIDATES: Candidate[] = [
-  {
-    id: "droit1",
-    nom: "Kayembe",
-    postnom: "Bamue",
-    prenom: "Claudine",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "Justice, équité et voix pour chaque étudiant",
-  },
-  {
-    id: "droit2",
-    nom: "Nkosso",
-    postnom: "Katolo",
-    prenom: "Lucien",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "Le droit au service des étudiants",
-  },
-  {
-    id: "droit3",
-    nom: "Mufuta",
-    postnom: "Mwipita",
-    prenom: "Jessy",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "Défendre vos droits, construire l'avenir",
-  },
-  {
-    id: "droit4",
-    nom: "Masanka",
-    postnom: "N'Thila",
-    prenom: "Pathou",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "Justice, engagement et leadership étudiant",
-  },
-  {
-    id: "droit5",
-    nom: "Klonda",
-    postnom: "Otshumbe",
-    prenom: "Laurent",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "Pour une faculté juste et respectée",
-  },
-  {
-    id: "droit6",
-    nom: "Nkoji",
-    postnom: "Tunda",
-    prenom: "Sam",
-    faculte: "Droit",
-    votes: 0,
-    slogan: "La voix des étudiants, la force du droit",
-  },
-];
 
 function getInitials(prenom: string, postnom: string, nom: string) {
   return [prenom, postnom, nom]
@@ -89,6 +33,24 @@ export default function VotePage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      const { data, error } = await supabase
+        .from("candidat")
+        .select("*")
+        .eq("faculte", "Droit");
+
+      console.log(error);
+
+      if (!error && data) {
+        setCandidates(data);
+      }
+    };
+
+    fetchCandidates();
+  }, []);
 
   useEffect(() => {
     const voted = window.localStorage.getItem("upc_has_voted_droit");
@@ -114,7 +76,7 @@ export default function VotePage() {
     try {
       // Récupérer le nombre de votes actuel du candidat
       const { data, error: selectError } = await supabase
-        .from("candidates")
+        .from("candidat")
         .select("votes")
         .eq("id", selectedCandidateId)
         .single();
@@ -127,7 +89,7 @@ export default function VotePage() {
 
       // Incrémenter le compteur de votes dans Supabase
       const { error: updateError } = await supabase
-        .from("candidates")
+        .from("candidat")
         .update({ votes: currentVotes + 1 })
         .eq("id", selectedCandidateId);
 
@@ -139,6 +101,7 @@ export default function VotePage() {
       setStep("success");
       setConfirmOpen(false);
     } catch (e) {
+      console.log(e);
       setError("Une erreur est survenue lors de l'enregistrement du vote.");
     } finally {
       setLoading(false);
@@ -226,7 +189,7 @@ export default function VotePage() {
               </p>
             </div>
             <div className="candidates-grid" id="prefac-candidates">
-              {CANDIDATES.map((candidate) => (
+              {candidates.map((candidate) => (
                 // Construit le nom complet à partir du modèle
                 // prenom + postnom + nom pour garder l'affichage existant
                 <div
@@ -317,12 +280,10 @@ export default function VotePage() {
               <p id="confirm-message">
                 Voulez-vous confirmer votre vote pour{" "}
                 {(() => {
-                  const c = CANDIDATES.find(
+                  const c = candidates.find(
                     (cand) => cand.id === selectedCandidateId,
                   );
-                  return c
-                    ? `${c.prenom} ${c.postnom} ${c.nom}`
-                    : "";
+                  return c ? `${c.prenom} ${c.postnom} ${c.nom}` : "";
                 })()}{" "}
                 ?
               </p>
